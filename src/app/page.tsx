@@ -1,101 +1,100 @@
+"use client"
 import Image from "next/image";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa6";
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // define state
+  const [todos,setTodos]=useState([
+    {movie: "Django unchanged",id:1},
+    {movie:"catch me if you can",id:2}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  ])
+  const [inputval,setinputval]=useState("")
+  const [id,setid]=useState(0)
+ // console.log(inputval , id) for checking
+
+  //function Add item
+  const Additme=()=> {
+    let obj:any =todos.find(item => item.id==id)
+  
+    if(obj){
+    let newarray=todos.filter(item=> item.id !==id)
+    setTodos([...newarray,{movie: inputval, id}])
+    setinputval("")
+    setid(0)
+    return
+  }
+
+    setTodos([...todos,{movie: inputval, id}])
+    setinputval("")
+    setid(0)
+  }
+  // Edit function
+  const Edititem=(id:any)=>{
+    let obj:any =todos.find(item => item.id ==id)
+    setinputval(obj.movie)
+    setid(obj.id)
+  }
+  // Delete function
+  const Delitem=(id:any)=>{
+    let newarray=todos.filter(item=> item.id !==id)
+    setTodos([...newarray])
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-center text-[35px] underline"> Movies Todo App  </h1>
+      {/* start input div */}
+       <div className="flex justify-between gap-4 mt-4">
+        <input type="text" value={inputval}
+        
+        onChange={(e) => setinputval(e.target.value)}
+        className="p-2 ml-2 w-[60%] border-b text-lg focus:outline-none " 
+        placeholder="Enter movi name "
+        ></input>
+        
+        <input 
+        type="number" value={id}
+        onChange={(e:any) => setid(e.target.value)}
+        className="p-2 ml-2 w-[20%] border-b text-lg focus:outline-none " 
+        placeholder="Move Id">
+        </input>
+        <button onClick={(Additme)} className="bg-blue-400 w-[20%] text-white rounded hover:bg-blue-200"> Add movies</button>
+        </div> 
+        {/* end input div   */}
+        <h1 className="text-center text-[35px] underline mt-3 text-rose-900"> Movies List  </h1>
+
+        <div className="grid grid-cols-2 gap-5 mt-5">
+        
+        {/* Grid items */}
+        {/* <FaPlus />  checking ract icon */}
+
+      {
+        todos.map((item:any,i:any)=>{
+          return(
+            <div className="shadow p-4" key={i}>
+            <div className="flex justify-between">
+              <span className="shadow rounded-full h-8 w-8 text-center my-auto ">{i+1}</span>
+              <span onClick={()=>Delitem(item.id)} className="shadow rounded-full h-8 w-8 text-center my-auto cursor-pointer">x</span>
+            
+            </div>
+             {/* data div  */}
+             
+            <div className="mt-3 text-[30px] text-gray-600"> {item.movie}</div> 
+            <div> 
+              <h2 onClick={()=>Edititem(item.id)} className="text-right cursor-pointer">Edit</h2>
+              {/* <h1 className="text-green-500">id: {item.id}</h1>  */}
+            </div>
+          
+           </div>
+          )
+        })
+      }
+                 
+       </div>
+      </div>
+      
   );
 }
